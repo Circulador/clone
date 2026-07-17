@@ -41,9 +41,9 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add dados.json
+          git add dados.json insights.json
           if git diff --cached --quiet; then
-            echo "Sem alterações no dados.json. Nada a commitar."
+            echo "Sem alterações. Nada a commitar."
           else
             git commit -m "chore: atualização automática dos dados ($(date -u +'%Y-%m-%d %H:%M UTC'))"
             git push

@@ -113,6 +113,13 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 .back-btn:hover{border-color:var(--accent)}
 .sheet-badge{display:inline-block;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:10px}
 .sheet-badge.b{background:rgba(42,120,214,.18);color:#7db4f5}.sheet-badge.jsi{background:rgba(27,175,122,.18);color:#4fd6a0}.sheet-badge.p{background:rgba(237,161,0,.18);color:#f5c860}
+.sheet-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 14px}
+.sheet-stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;text-align:center}
+.sheet-stat .ss-l{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.4px}
+.sheet-stat .ss-v{font-size:22px;font-weight:800;color:var(--accent);margin:4px 0 2px}
+.sheet-stat .ss-s{font-size:10.5px;color:var(--txt2)}
+.legacy-warn{background:linear-gradient(135deg,#3a1a08,#2a1209);border:1px solid #6b3010;border-left:4px solid var(--amber);border-radius:10px;padding:10px 14px;font-size:12px;color:#f0e2c0;margin-bottom:12px;line-height:1.45}
+:root[data-theme="light"] .legacy-warn{background:#fff8ec;color:#5a4020}
 .landing-h{text-align:center;margin:16px 0 8px}.landing-h h2{font-size:22px}.landing-h p{color:var(--txt2);font-size:13px;margin-top:6px}
 .upd-chip{background:var(--panel2);border:1px solid var(--line);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--txt2);display:inline-flex}
 .up-btn{background:var(--accent);color:#fff;border:none;padding:10px 16px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;margin-right:8px}
@@ -194,7 +201,8 @@ details.chart-fold .chartbox{height:160px}
 .landing-cta a{color:var(--accent);font-size:13px;font-weight:600;cursor:pointer;text-decoration:none}
 .landing-cta a:hover{text-decoration:underline}
 @media(max-width:1024px){.app-official{grid-template-columns:1fr}.app-official .side{position:fixed;top:0;left:0;width:270px;height:100vh;z-index:50;transform:translateX(-100%)}html.nav-open .app-official .side{transform:translateX(0)}html.nav-open .nav-overlay{opacity:1;pointer-events:auto}.navtoggle{display:inline-flex}.pinbtn{display:none}}
-@media(max-width:800px){.queue-grid,.links-grid,.sheet-links,.forecast-unified .scenarios,.kpis3,.prob-row,.comm-grid{grid-template-columns:1fr}}
+@media(max-width:800px){.queue-grid,.links-grid,.sheet-links,.forecast-unified .scenarios,.kpis3,.prob-row,.comm-grid,.sheet-stats{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.sheet-stats{grid-template-columns:1fr}}
 @media(max-width:640px){.official-header .oh-txt p{display:none}.main{padding:14px 12px 50px}.posb .num{font-size:36px}}
 @media print{.side,.navtoggle,.nav-overlay,.back-btn,.searchbox,.suggestions,.act-row,.jbtns,.up-actions,details.advanced{display:none!important}.main{padding:0}body{background:#fff;color:#111}}
 </style>
@@ -226,10 +234,12 @@ details.chart-fold .chartbox{height:160px}
 <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="instbtn" id="topInstall" onclick="promptInstall()">📲 Instalar</button><button class="themebtn" id="themeToggle" onclick="toggleTheme()">🌙 Tema escuro</button><button class="dlbtn" onclick="window.print()">⬇️ Imprimir / PDF</button></div></div>
 
 <div id="view-buscar">
-<div id="landing"><div class="landing-h"><h2>Onde você está?</h2><p>Escolha a fila da sua etapa atual — cada planilha é analisada separadamente.</p></div><div class="queue-grid" id="queueGrid"></div><div class="landing-cta"><a onclick="showView('comunidade')">👥 Ver panorama da comunidade (sem somar filas)</a></div></div>
+<div id="landing"><div class="landing-h"><h2>Onde você está?</h2><p>Escolha a fila da sua etapa — busca e estatísticas <b>só dessa planilha</b>.</p></div><div class="queue-grid" id="queueGrid"></div></div>
 <div id="sheetView" class="view-hidden">
 <button type="button" class="back-btn" onclick="backToLanding()">← Voltar às filas</button>
 <div id="activeSheetBadge"></div>
+<div id="sheetStats" class="sheet-stats"></div>
+<div id="legacyWarn" class="legacy-warn view-hidden"></div>
 <div class="searchbox"><h3>🔍 Busque seu processo</h3><p>Digite sua <b>sigla</b> ou <b>data de entrega</b> nesta fila.</p>
 <div class="search-wrap"><input type="text" id="search" placeholder="Ex.: RGC, 11/08/2025..." autocomplete="off"><span class="search-ic">🔎</span><button type="button" class="search-clear" id="searchClear" onclick="clearSearch()" aria-label="Limpar">✕</button><div class="suggestions" id="suggestions"></div></div>
 <span class="chip on" data-f="todos">Todos</span><span class="chip" data-f="aguardando">Só aguardando</span></div>
@@ -291,6 +301,8 @@ var SHEET_LABELS = {
 };
 var SHEET_ICONS = { B: '📊', JSI: '🇮🇹', P: '📎' };
 var INSIGHTS = null;
+var DATA_LEGACY_MERGE = false;
+var LAST_SOURCE = '';
 var activeSheet = null;
 var activeFilter = 'todos';
 var chartInstances = [];
@@ -390,6 +402,7 @@ function enrich() {
   updateSidebar();
   renderFavs();
   renderCommunityView();
+  if (activeSheet) renderSheetStats(activeSheet);
 }
 
 function partitionAndApply(records) {
@@ -569,12 +582,49 @@ function renderQueueGrid() {
   el.innerHTML = ['B', 'JSI', 'P'].map(function (pid) {
     var st = SHEET_STATS[pid] || {};
     var w = (st.waiting || []).length;
+    var tot = (SHEETS[pid] || []).length;
     return '<div class="queue-card" data-sheet="' + pid + '" onclick="pickSheet(\'' + pid + '\')">' +
       '<div class="qc-icon">' + SHEET_ICONS[pid] + '</div>' +
       '<div class="qc-title">' + pid + '</div>' +
       '<div class="qc-sub">' + SHEET_LABELS[pid] + '</div>' +
-      '<div class="qc-count">' + w + '</div><div class="qc-lbl">aguardando</div></div>';
+      '<div class="qc-count">' + tot + '</div><div class="qc-lbl">' + w + ' aguardando</div></div>';
   }).join('');
+}
+
+function renderSheetStats(pid) {
+  var el = document.getElementById('sheetStats');
+  if (!el) return;
+  if (!pid) { el.innerHTML = ''; return; }
+  var st = SHEET_STATS[pid] || {};
+  var tot = (SHEETS[pid] || []).length;
+  var w = (st.waiting || []).length;
+  var done = (st.resolved || []).length;
+  var km = getKmMedian(pid);
+  var tp = INSIGHTS && INSIGHTS.throughput_mensal_3m && INSIGHTS.throughput_mensal_3m[pid];
+  el.innerHTML =
+    '<div class="sheet-stat"><div class="ss-l">Na planilha</div><div class="ss-v">' + tot + '</div><div class="ss-s">registros totais</div></div>' +
+    '<div class="sheet-stat"><div class="ss-l">Aguardando</div><div class="ss-v">' + w + '</div><div class="ss-s">nesta fila agora</div></div>' +
+    '<div class="sheet-stat"><div class="ss-l">Resolvidos</div><div class="ss-v">' + done + '</div><div class="ss-s">' + (tot ? Math.round(done / tot * 100) : 0) + '% da planilha</div></div>' +
+    '<div class="sheet-stat"><div class="ss-l">Mediana KM</div><div class="ss-v">' + (km != null ? km : (st.mediana || '—')) + '</div><div class="ss-s">dias · ~' + (tp != null ? tp : '—') + '/mês</div></div>';
+  updateMetaForSheet(pid, tot);
+}
+
+function updateMetaForSheet(pid, tot) {
+  var s = document.getElementById('sf-source');
+  if (s && pid) s.textContent = 'Planilha ' + pid + ' · ' + tot + ' registros' + (LAST_SOURCE ? ' · ' + LAST_SOURCE : '');
+}
+
+function showLegacyMergeWarn(show) {
+  DATA_LEGACY_MERGE = !!show;
+  var el = document.getElementById('legacyWarn');
+  if (!el) return;
+  if (show) {
+    el.classList.remove('view-hidden');
+    el.innerHTML = '⚠️ <b>dados.json desatualizado</b> (formato mesclado 273). Use <b>Atualizar agora</b> em Sobre → Avançado para carregar as 3 planilhas separadas (B ~194, JSI ~150, P ~19).';
+  } else {
+    el.classList.add('view-hidden');
+    el.innerHTML = '';
+  }
 }
 
 function pickSheet(pid) {
@@ -583,6 +633,8 @@ function pickSheet(pid) {
   document.getElementById('sheetView').classList.remove('view-hidden');
   var badge = document.getElementById('activeSheetBadge');
   badge.innerHTML = '<span class="sheet-badge ' + pid.toLowerCase() + '">' + SHEET_ICONS[pid] + ' ' + SHEET_LABELS[pid] + '</span>';
+  renderSheetStats(pid);
+  showLegacyMergeWarn(DATA_LEGACY_MERGE);
   document.getElementById('mainTitle').textContent = 'Fila ' + pid;
   clearSearch();
   updateSidebar();
@@ -641,7 +693,12 @@ function updateStamp(dateStr, source) {
   var d = document.getElementById('sf-date');
   var s = document.getElementById('sf-source');
   if (d && dateStr) d.textContent = dateStr;
-  if (s && source) s.textContent = source;
+  LAST_SOURCE = source || '';
+  if (activeSheet && SHEETS[activeSheet]) {
+    updateMetaForSheet(activeSheet, SHEETS[activeSheet].length);
+  } else if (s && source) {
+    s.textContent = source;
+  }
 }
 
 var input = document.getElementById('search');
@@ -873,8 +930,9 @@ function applyRecordsFromAll(bySheet, src, stampDate) {
   resetProcView();
   if (input) input.value = '';
   updateStamp(stampDate || fmt(new Date()), src);
+  showLegacyMergeWarn(/merge/i.test(src));
   var w = (SHEET_STATS.B.waiting.length + SHEET_STATS.JSI.waiting.length + SHEET_STATS.P.waiting.length);
-  setStatus('✅ ' + src + ' — B:' + SHEETS.B.length + ' JSI:' + SHEETS.JSI.length + ' P:' + SHEETS.P.length + ' · ' + w + ' aguardando.');
+  setStatus('✅ ' + src + ' — B:' + SHEETS.B.length + ' · JSI:' + SHEETS.JSI.length + ' · P:' + SHEETS.P.length + ' registros (' + w + ' aguardando no total).');
   return true;
 }
 
@@ -936,6 +994,8 @@ function loadFromDadosJson() {
     var br = updated.substring(0, 10).split('-');
     var brDate = br.length === 3 ? (br[2] + '/' + br[1] + '/' + br[0]) : fmt(new Date());
     var src = (payload.meta && payload.meta.source) ? payload.meta.source : 'dados.json';
+    var isLegacyMerge = /merge/i.test(src) || ((payload.meta && payload.meta.migrations_collapsed) > 0);
+    showLegacyMergeWarn(isLegacyMerge);
     if (applyRecordsFromAll(bySheet, src, brDate)) return 'json';
     throw new Error('apply');
   });
