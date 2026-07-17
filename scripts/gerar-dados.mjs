@@ -1,11 +1,11 @@
-// scripts/gerar-dados.mjs  (v2 — diagnóstico + múltiplas estratégias de download)
+// scripts/gerar-dados.mjs  (v3 — múltiplas estratégias + fallback do dataset embutido)
 // Baixa a Planilha B do OneDrive e gera dados.json na raiz do repositório.
 // Roda no servidor do GitHub Actions => sem CORS e sem login (se o link for público).
 //
 // Node 20+ (fetch nativo). Dependência única: xlsx.
 
 import * as XLSX from 'xlsx';
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { writeFileSync, mkdirSync, readFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 
 const SHEETS = [
@@ -17,10 +17,10 @@ const SHEETS = [
   },
 ];
 
-// Gera na raiz (mesma pasta do index.html). Se o index estiver em /docs, troque para 'docs/dados.json'.
 const OUT = 'dados.json';
+const INDEX = 'index.html';
+const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
 
-// ---------- utilidades de data ----------
 function p2(n) { return String(n).padStart(2, '0'); }
 function isoFromCell(v) {
   if (v instanceof Date && !isNaN(v)) return `${v.getFullYear()}-${p2(v.getMonth() + 1)}-${p2(v.getDate())}`;
@@ -29,7 +29,7 @@ function isoFromCell(v) {
     return `${d.getUTCFullYear()}-${p2(d.getUTCMonth() + 1)}-${p2(d.getUTCDate())}`;
   }
   if (typeof v === 'string') {
-    const m = v.match(/^(\d{1,2})\d{1,2}\d{2,4}$/);
+    const m = v.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
     if (m) { let [, d, mo, y] = m; if (y.length === 2) y = '20' + y; return `${y}-${p2(+mo)}-${p2(+d)}`; }
   }
   return null;
@@ -50,8 +50,11 @@ function rowsToRecords(rows, pid) {
   return recs;
 }
 
-// ---------- estratégias de download ----------
 function b64url(s) { return Buffer.from(s, 'utf-8').toString('base64').replace(/=+$/, '').replace(/\//g, '_').replace(/\+/g, '-'); }
+
+function decodeJsonUrl(raw) {
+  return raw.replace(/\\u0026/g, '&').replace(/\\\//g, '/').replace(/\\"/g, '"');
+}
 
 function downloadUrls(shareUrl) {
   const enc = 'u!' + b64url(shareUrl);
@@ -60,31 +63,84 @@ function downloadUrls(shareUrl) {
     { tag: 'api.shares/root/content', url: `https://api.onedrive.com/v1.0/shares/${enc}/root/content` },
     { tag: 'api.shares/driveItem/content', url: `https://api.onedrive.com/v1.0/shares/${enc}/driveItem/content` },
     { tag: '1drv.ms?download=1', url: withDl },
+    { tag: 'share-page', url: shareUrl, html: true },
   ];
 }
 
 function looksLikeXlsx(buf) {
-  // xlsx é um zip => começa com "PK" (0x50 0x4B)
   return buf && buf.length > 4 && buf[0] === 0x50 && buf[1] === 0x4B;
+}
+
+async function fetchBuffer(url, tag) {
+  const res = await fetch(url, { redirect: 'follow', headers: { 'User-Agent': UA, Accept: '*/*' } });
+  const ct = res.headers.get('content-type') || '';
+  if (!res.ok) { console.log(`   ↳ [${tag}] HTTP ${res.status} (${ct})`); return null; }
+  const buf = Buffer.from(await res.arrayBuffer());
+  console.log(`   ↳ [${tag}] HTTP 200 · ${buf.length} bytes · ${ct}`);
+  return buf;
+}
+
+function urlsFromShareHtml(html, finalUrl) {
+  const found = [];
+  for (const re of [
+    /"(?:downloadUrl|@content\.downloadUrl)"\s*:\s*"([^"]+)"/g,
+    /migratedDirectDownloadUrl\s*=\s*'([^']+)'/g,
+  ]) {
+    let m;
+    while ((m = re.exec(html))) found.push(decodeJsonUrl(m[1]));
+  }
+  try {
+    const u = new URL(finalUrl);
+    const resid = u.searchParams.get('resid') || u.searchParams.get('id');
+    const authkey = u.searchParams.get('authkey');
+    if (resid && authkey) {
+      found.push(`https://onedrive.live.com/download.aspx?resid=${encodeURIComponent(resid)}&authkey=${encodeURIComponent(authkey)}`);
+    }
+  } catch (_) { /* ignore */ }
+  return [...new Set(found)];
 }
 
 async function tryDownload(sheet) {
   const attempts = downloadUrls(sheet.url);
   for (const a of attempts) {
     try {
-      const res = await fetch(a.url, { redirect: 'follow', headers: { 'User-Agent': 'Mozilla/5.0 (GitHubActions)' } });
-      const ct = res.headers.get('content-type') || '';
-      if (!res.ok) { console.log(`   ↳ [${a.tag}] HTTP ${res.status} (${ct})`); continue; }
-      const buf = Buffer.from(await res.arrayBuffer());
-      console.log(`   ↳ [${a.tag}] HTTP 200 · ${buf.length} bytes · ${ct}`);
+      if (a.html) {
+        const res = await fetch(a.url, { redirect: 'follow', headers: { 'User-Agent': UA, Accept: 'text/html,*/*' } });
+        const html = await res.text();
+        const extra = urlsFromShareHtml(html, res.url);
+        for (const url of extra) {
+          const buf = await fetchBuffer(url, `${a.tag}-parsed`);
+          if (buf && looksLikeXlsx(buf)) {
+            console.log(`   ↳ [${a.tag}-parsed] ✅ XLSX válido`);
+            return buf;
+          }
+        }
+        continue;
+      }
+      const buf = await fetchBuffer(a.url, a.tag);
+      if (!buf) continue;
       if (looksLikeXlsx(buf)) { console.log(`   ↳ [${a.tag}] ✅ é um XLSX válido (assinatura PK)`); return buf; }
       const head = buf.slice(0, 120).toString('utf-8').replace(/\s+/g, ' ');
-      console.log(`   ↳ [${a.tag}] ⚠️ não é XLSX. Início do conteúdo: "${head}"`);
+      console.log(`   ↳ [${a.tag}] ⚠️ não é XLSX. Início: "${head}"`);
     } catch (e) {
       console.log(`   ↳ [${a.tag}] ❌ ${e.message}`);
     }
   }
   return null;
+}
+
+function extractEmbeddedRecords() {
+  try {
+    const html = readFileSync(INDEX, 'utf-8');
+    const m = html.match(/<script id="dataset"[^>]*>([\s\S]*?)<\/script>/);
+    if (!m) return [];
+    const records = JSON.parse(m[1]);
+    console.log(`   ↳ dataset embutido: ${records.length} registros`);
+    return records.map((r) => ({ ...r, planilha: r.planilha || 'B', origem: r.origem || 'B' }));
+  } catch (e) {
+    console.log(`   ↳ dataset embutido: ❌ ${e.message}`);
+    return [];
+  }
 }
 
 async function processSheet(sheet) {
@@ -104,6 +160,7 @@ async function processSheet(sheet) {
 
 async function main() {
   let base = [];
+  let source = 'OneDrive (GitHub Actions)';
   const report = [];
   for (const s of SHEETS) {
     const recs = await processSheet(s);
@@ -111,21 +168,26 @@ async function main() {
     if (s.base) base = recs;
   }
 
-  console.log(`\n===== RESUMO =====\n${report.join('\n')}`);
+  if (!base.length) {
+    console.log('\n⚠️ OneDrive indisponível via API. Usando dataset embutido do index.html...');
+    base = extractEmbeddedRecords();
+    source = 'dataset embutido (fallback)';
+  }
+
+  console.log(`\n===== RESUMO =====\n${report.join('\n')}\nTotal final: ${base.length}`);
 
   if (!base.length) {
-    console.error('\n⛔ 0 registros da Planilha B. Não vou sobrescrever o dados.json com vazio.');
-    console.error('   Veja os logs acima: se apareceu "não é XLSX", o link não está entregando o arquivo puro.');
+    console.error('\n⛔ Nenhum registro disponível. Abortando.');
     process.exit(1);
   }
 
   const payload = {
-    meta: { generated_at: new Date().toISOString(), source: 'OneDrive (GitHub Actions)', total: base.length },
+    meta: { generated_at: new Date().toISOString(), source, total: base.length },
     records: base,
   };
   mkdirSync(dirname(OUT) || '.', { recursive: true });
   writeFileSync(OUT, JSON.stringify(payload, null, 2), 'utf-8');
-  console.log(`\n💾 Gerado ${OUT} com ${base.length} registros.`);
+  console.log(`\n💾 Gerado ${OUT} com ${base.length} registros (${source}).`);
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });

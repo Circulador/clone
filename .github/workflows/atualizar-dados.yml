@@ -6,7 +6,7 @@ name: Atualizar dados da fila
 #  - repository_dispatch: acionado por API (usado pelo botão "Atualizar da nuvem" do site)
 on:
   schedule:
-    - cron: '0 9 * * *'          # todo dia às 09:00 UTC
+    - cron: '0 */6 * * *'        # a cada 6 horas
   workflow_dispatch: {}           # execução manual pela interface do GitHub
   repository_dispatch:
     types: [atualizar-dados]      # execução via API (botão do site)

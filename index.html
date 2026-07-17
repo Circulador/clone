@@ -390,15 +390,15 @@ html.nav-unpinned.nav-open .nav-overlay{opacity:1;pointer-events:auto}
   </aside>
   <main class="main">    <div class="top"><div><h2>Consultor de Expectativa de Atendimento</h2><div class="meta"><span>👥 Ferramenta aberta à comunidade</span><span class="upd-chip">🔄 Planilha: <b id="sf-date">07/08/2026</b> · Fonte: <span id="sf-source">grupo de WhatsApp</span> · <b style="color:var(--amber)">Dados não oficiais</b></span><span id="lastUpdate" style="display:none">🔄 Dados: 07/08/2026</span></div></div><div style="display:flex;gap:10px"><button class="instbtn" id="topInstall" onclick="promptInstall()">📲 Instalar app</button><button class="themebtn" id="themeToggle" onclick="toggleTheme()">🌙 Tema escuro</button><button class="dlbtn" id="imgPageBtn" onclick="baixarPaginaImagem()" style="background:#1baf7a">🖼️ Salvar imagem</button><button class="dlbtn" onclick="window.print()">⬇️ Imprimir / PDF</button></div></div>
     <div class="update-panel">
-      <h3>🔄 Manter os dados atualizados</h3>
-      <p>Esta ferramenta usa uma cópia da planilha "B — Balcão". Para atualizar com a versão mais recente, baixe o arquivo do OneDrive e carregue aqui — a análise é <b>reprocessada automaticamente</b>, sem precisar mexer no código.</p>
-      <div class="up-actions"><button class="up-btn" onclick="document.getElementById('xlsxFile').click()">📂 Carregar planilha (.xlsx)</button><input type="file" id="xlsxFile" accept=".xlsx,.xls,.csv" style="display:none"><button class="up-btn sec" id="cloudBtn" onclick="loadDadosJson()">☁️ Tentar atualizar da nuvem</button><span class="up-status" id="upStatus"></span></div>
+      <h3>🔄 Dados atualizados automaticamente</h3>
+      <p>Ao abrir o site, os dados da planilha <b>B — Balcão</b> são recarregados automaticamente a partir do <b>dados.json</b> (sincronizado pelo GitHub Actions com o OneDrive) e, se possível, direto da fonte no OneDrive.</p>
+      <div class="up-actions"><button class="up-btn" id="cloudBtn" onclick="refreshData(true)">🔄 Atualizar agora</button><input type="file" id="xlsxFile" accept=".xlsx,.xls,.csv" style="display:none"><button class="up-btn sec" onclick="document.getElementById('xlsxFile').click()">📂 Carregar planilha manual (.xlsx)</button><span class="up-status" id="upStatus"></span></div>
       <div class="sheet-links">
         <a class="sheet-link" href="https://1drv.ms/x/c/ba23482b38fbdc1e/EVyxoIPnz65Du-mLBAl7CuUBOsLybUkq3f-TJiOIyW9HBA?e=frZ3Ms" target="_blank" rel="noopener noreferrer"><div class="sl-t">📊 Planilha B — Balcão</div><div class="sl-d">Fila após entrega até o e-mail "Já sou Italiano" (base desta análise)</div><div class="sl-go">Abrir no OneDrive →</div></a>
         <a class="sheet-link" href="https://1drv.ms/x/c/ba23482b38fbdc1e/ETkw9cQ64L5Ko2WicjOlg04BiOc1mm4MLMiqKWcidPm6iA?e=4zXpjS" target="_blank" rel="noopener noreferrer"><div class="sl-t">🇮🇹 Planilha JSI — Já sou Italiano</div><div class="sl-d">Etapa seguinte: espera pelo e-mail PEC de finalização consular</div><div class="sl-go">Abrir no OneDrive →</div></a>
         <a class="sheet-link" href="https://1drv.ms/x/c/ba23482b38fbdc1e/EekjF_2Qd5tJoDqaLQ8-IokB436GSnReRCEBHgeuyg72uA?e=az9sGs" target="_blank" rel="noopener noreferrer"><div class="sl-t">📎 Planilha P — Pendências</div><div class="sl-d">Tempo de resolução de pendências / SEDEX</div><div class="sl-go">Abrir no OneDrive →</div></a>
       </div>
-      <p style="margin-top:10px;font-size:11.5px;color:var(--txt3)">ℹ️ A atualização automática direto do link não é possível num arquivo HTML avulso (o OneDrive exige login e bloqueia acesso externo por segurança). Por isso o método confiável é <b>carregar o .xlsx</b> — leva 5 segundos e não depende de ninguém.</p>
+      <p style="margin-top:10px;font-size:11.5px;color:var(--txt3)">ℹ️ A Microsoft restringiu o download anônimo via API do OneDrive. O site usa o <b>dados.json</b> (atualizado pelo GitHub Actions a cada 6 h) como fonte principal e tenta buscar direto no OneDrive quando possível. O upload manual continua disponível como alternativa.</p>
     </div>
     <div class="sec-t" id="v5-dash-sec">📊 Painel geral da comunidade</div>
     <div class="dash"><div class="dash-grid" id="v5dash"></div>
@@ -541,7 +541,8 @@ function isoFromCell(v){if(v instanceof Date&&!isNaN(v)){return v.getFullYear()+
 function excelToRecords(rows){var recs=[],bad=/^(MEDIA|MÉDIA|MENOR|MAIOR|TOTAL|ULTIMO|ÚLTIMO|ESTAMOS|DATA DE|NOME|RECEBIDO|GRUPO|N[ºo°]|B PLAN|PLANILHA|ATUALIZAD|DIAS)/i;for(var i=0;i<rows.length;i++){var r=rows[i];if(!r||r.length<2)continue;var entrega=isoFromCell(r[0]);var nome=(typeof r[1]==='string')?r[1].trim():'';if(!entrega||!nome||bad.test(nome))continue;var resol=isoFromCell(r[4]);recs.push({entrega:entrega,nome:nome.replace(/\s+/g,' '),grupo:(r[2]!=null?String(r[2]).trim():'-')||'-',resol:resol});}return recs;}
 function loadSheetJS(cb){if(typeof XLSX!=='undefined')return cb();var CDNS=["https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js","https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js","https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js"];var i=0;(function t(){if(typeof XLSX!=='undefined')return cb();if(i>=CDNS.length)return cb(new Error('no-xlsx'));var s=document.createElement('script');s.src=CDNS[i++];s.onload=function(){typeof XLSX!=='undefined'?cb():t();};s.onerror=t;document.head.appendChild(s);})();}
 function enrich(){DATA.forEach(function(x){x.dEntrega=pd(x.entrega);x.dResol=x.resol?pd(x.resol):null;x.done=!!x.resol;x.espera=x.done?days(x.dEntrega,x.dResol):days(x.dEntrega,TODAY);});resolved=DATA.filter(function(x){return x.done;});waiting=DATA.filter(function(x){return !x.done;}).sort(function(a,b){return a.dEntrega-b.dEntrega;});resTimes=resolved.map(function(x){return x.espera;});mediaGeral=resTimes.length?Math.round(resTimes.reduce(function(a,b){return a+b;},0)/resTimes.length):0;medianaGeral=resTimes.length?Math.round(median(resTimes)):0;monthCounts={};resolved.forEach(function(x){var k=x.dResol.getFullYear()+'-'+p2(x.dResol.getMonth()+1);monthCounts[k]=(monthCounts[k]||0)+1;});thrPico=Math.max(mc(2026,5),mc(2026,6),1);thrMedTrim=Math.max(Math.round((mc(2026,4)+mc(2026,5)+mc(2026,6))/3),1);thrSem=Math.max(Math.round((mc(2026,1)+mc(2026,2)+mc(2026,3)+mc(2026,4)+mc(2026,5)+mc(2026,6))/6),1);filaPos={};waiting.forEach(function(w,i){filaPos[w.nome+'|'+w.entrega]=i+1;});DATA.forEach(function(x){x.posFila=x.done?null:(filaPos[x.nome+'|'+x.entrega]||null);});updateSidebar();}
-function ingestBuffer(buf,src){try{var wb=XLSX.read(new Uint8Array(buf),{type:'array',cellDates:true});var ws=wb.Sheets[wb.SheetNames[0]];var rows=XLSX.utils.sheet_to_json(ws,{header:1,raw:true});var recs=excelToRecords(rows);if(recs.length<10){setStatus('⚠️ Poucos registros ('+recs.length+'). Confirme a planilha B.');return;}DATA=recs;enrich();renderTable();document.getElementById('result').style.display='none';document.getElementById('empty').style.display='block';document.documentElement.classList.remove('has-proc');document.getElementById('search').value='';document.getElementById('lastUpdate').textContent='🔄 Dados: '+fmt(new Date())+' ('+src+')';updateStamp(fmt(new Date()),'planilha carregada ('+src+')');setStatus('✅ Atualizado ('+src+')! '+recs.length+' processos · '+resolved.length+' resolvidos · '+waiting.length+' aguardando.');}catch(ex){setStatus('❌ Erro: '+ex.message);}}
+function applyRecords(recs,src,stampDate){if(!recs||recs.length<10){setStatus('⚠️ Poucos registros ('+(recs?recs.length:0)+'). Confirme a planilha B.');return false;}DATA=recs;enrich();renderTable();document.getElementById('result').style.display='none';document.getElementById('empty').style.display='block';document.documentElement.classList.remove('has-proc');document.getElementById('search').value='';var dStr=stampDate||fmt(new Date());var lu=document.getElementById('lastUpdate');if(lu)lu.textContent='🔄 Dados: '+dStr+' ('+src+')';updateStamp(dStr,src);setStatus('✅ Atualizado ('+src+')! '+recs.length+' processos · '+resolved.length+' resolvidos · '+waiting.length+' aguardando.');return true;}
+function ingestBuffer(buf,src){try{var wb=XLSX.read(new Uint8Array(buf),{type:'array',cellDates:true});var ws=wb.Sheets[wb.SheetNames[0]];var rows=XLSX.utils.sheet_to_json(ws,{header:1,raw:true});applyRecords(excelToRecords(rows),'planilha carregada ('+src+')',fmt(new Date()));}catch(ex){setStatus('❌ Erro: '+ex.message);}}
 (function(){var inp=document.getElementById('xlsxFile');if(inp)inp.addEventListener('change',function(e){var f=e.target.files[0];if(!f)return;setStatus('⏳ Lendo '+f.name+'...');loadSheetJS(function(err){if(err){setStatus('❌ Sem leitor de planilha (precisa de internet uma vez).');return;}var rd=new FileReader();rd.onload=function(ev){ingestBuffer(ev.target.result,f.name);};rd.readAsArrayBuffer(f);});});})();
 var STEPS=[
 {n:1,ic:'📅',t:'Agendamento no Consulado',d:'Marcação da data para comparecimento ao balcão consular.',dt:1,dl:'Data do agendamento'},
@@ -701,57 +702,24 @@ function isStandalone(){return window.matchMedia('(display-mode: standalone)').m
 function promptInstall(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(function(){deferredPrompt=null;showInstall(false);});}else{var ios=/iphone|ipad|ipod/i.test(navigator.userAgent);alert(ios?'Para instalar no iPhone/iPad:\n\n1) Toque em Compartilhar (↑)\n2) "Adicionar à Tela de Início"':'Abra o menu do navegador (⋮) e toque em "Instalar app".');}}
 if(!isStandalone()&&/iphone|ipad|ipod/i.test(navigator.userAgent)){showInstall(true);}
 if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}
-/* ===== leitura automatica via dados.json gerado pelo GitHub Actions ===== */
+/* ===== sincronização automática: OneDrive → dados.json → base embutida ===== */
 (function(){
-  function jsonStatus(msg){ if(typeof setStatus==='function') setStatus(msg); }
-  function normalizeRecord(r){
-    var out={
-      entrega:r.entrega,
-      nome:r.nome,
-      grupo:r.grupo || r.planilha || '-',
-      resol:r.resol || null,
-      planilha:r.planilha || r.origem || null,
-      origem:r.origem || r.planilha || null
-    };
-    return out;
-  }
-  var oldPlanilhaDe = window.planilhaDe;
-  window.planilhaDe = function(x){
-    if(x && x.planilha) return x.planilha;
-    if(x && x.origem) return x.origem;
-    return oldPlanilhaDe ? oldPlanilhaDe(x) : 'B';
-  };
-  window.loadDadosJson = function(){
-    jsonStatus('🔄 Verificando dados.json...');
-    return fetch('./dados.json?ts='+Date.now(), {cache:'no-store'})
-      .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
-      .then(function(payload){
-        var records = Array.isArray(payload) ? payload : (payload.records || []);
-        records = records.map(normalizeRecord).filter(function(x){ return x.entrega && x.nome; });
-        if(!records.length) throw new Error('dados.json sem registros válidos');
-        DATA = records;
-        if(typeof enrich==='function') enrich();
-        if(typeof renderTable==='function') renderTable();
-        var result=document.getElementById('result'); if(result) result.style.display='none';
-        var empty=document.getElementById('empty'); if(empty) empty.style.display='block';
-        document.documentElement.classList.remove('has-proc');
-        var search=document.getElementById('search'); if(search) search.value='';
-        var updated = (payload.meta && payload.meta.generated_at) ? payload.meta.generated_at : new Date().toISOString();
-        var iso=updated.substring(0,10);var pp=iso.split('-');var brDate=(pp.length===3)?(pp[2]+'/'+pp[1]+'/'+pp[0]):iso;
-        var lu=document.getElementById('lastUpdate'); if(lu) lu.textContent='🔄 Dados: '+brDate+' (dados.json)';
-        updateStamp(brDate,'nuvem (dados.json)');
-        jsonStatus('✅ dados.json carregado: '+records.length+' registros · '+resolved.length+' resolvidos · '+waiting.length+' aguardando.');
-        return true;
-      })
-      .catch(function(e){
-        jsonStatus('ℹ️ Exibindo a base local do site. Para atualizar, use "📂 Carregar planilha (.xlsx)".');
-        return false;
-      });
-  };
-  window.addEventListener('load', function(){
-    if(location.search.indexOf('nojson=1')>=0) return;
-    setTimeout(function(){ loadDadosJson(); }, 600);
-  });
+  var ONEDRIVE_PLANILHA_B='https://1drv.ms/x/c/ba23482b38fbdc1e/EVyxoIPnz65Du-mLBAl7CuUBOsLybUkq3f-TJiOIyW9HBA?e=frZ3Ms';
+  var REFRESH_MS=30*60*1000;
+  function jsonStatus(msg){if(typeof setStatus==='function')setStatus(msg);}
+  function normalizeRecord(r){return{entrega:r.entrega,nome:r.nome,grupo:r.grupo||r.planilha||'-',resol:r.resol||null,planilha:r.planilha||r.origem||null,origem:r.origem||r.planilha||null};}
+  function b64urlUtf8(s){var b=btoa(unescape(encodeURIComponent(s)));return b.replace(/=+$/,'').replace(/\//g,'_').replace(/\+/g,'-');}
+  function onedriveDownloadUrls(shareUrl){var enc='u!'+b64urlUtf8(shareUrl);var withDl=shareUrl.indexOf('?')>=0?shareUrl+'&download=1':shareUrl+'?download=1';return[{tag:'api.root',url:'https://api.onedrive.com/v1.0/shares/'+enc+'/root/content'},{tag:'api.driveItem',url:'https://api.onedrive.com/v1.0/shares/'+enc+'/driveItem/content'},{tag:'1drv.download',url:withDl}];}
+  function looksLikeXlsx(buf){return buf&&buf.byteLength>4&&buf[0]===0x50&&buf[1]===0x4B;}
+  function fetchOneDriveBuffer(shareUrl){var attempts=onedriveDownloadUrls(shareUrl);function tryNext(i){if(i>=attempts.length)return Promise.reject(new Error('onedrive-fail'));var a=attempts[i];return fetch(a.url,{redirect:'follow',cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.arrayBuffer();}).then(function(buf){if(!looksLikeXlsx(buf))throw new Error('not-xlsx');return buf;}).catch(function(){return tryNext(i+1);});}return tryNext(0);}
+  function isoToBr(iso){var pp=(iso||'').substring(0,10).split('-');return pp.length===3?(pp[2]+'/'+pp[1]+'/'+pp[0]):iso;}
+  function loadFromOneDrive(){jsonStatus('🔄 Buscando planilha B no OneDrive...');return fetchOneDriveBuffer(ONEDRIVE_PLANILHA_B).then(function(buf){return new Promise(function(resolve,reject){loadSheetJS(function(err){if(err)return reject(err);try{var wb=XLSX.read(new Uint8Array(buf),{type:'array',cellDates:true});var ws=wb.Sheets[wb.SheetNames[0]];var rows=XLSX.utils.sheet_to_json(ws,{header:1,raw:true});var recs=excelToRecords(rows);if(applyRecords(recs,'OneDrive (B)',fmt(new Date())))resolve('onedrive');else reject(new Error('poucos-registros'));}catch(e){reject(e);}});});}).catch(function(e){return Promise.reject(e);});}
+  function loadFromDadosJson(){jsonStatus('🔄 Verificando dados.json...');return fetch('./dados.json?ts='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}).then(function(payload){var records=Array.isArray(payload)?payload:(payload.records||[]);records=records.map(normalizeRecord).filter(function(x){return x.entrega&&x.nome;});if(!records.length)throw new Error('dados.json sem registros válidos');var updated=(payload.meta&&payload.meta.generated_at)?payload.meta.generated_at:new Date().toISOString();var brDate=isoToBr(updated);if(applyRecords(records,'nuvem (dados.json)',brDate))return 'json';throw new Error('poucos-registros');});}
+  var oldPlanilhaDe=window.planilhaDe;
+  window.planilhaDe=function(x){if(x&&x.planilha)return x.planilha;if(x&&x.origem)return x.origem;return oldPlanilhaDe?oldPlanilhaDe(x):'B';};
+  window.refreshData=function(manual){if(manual!==false)jsonStatus('🔄 Atualizando dados...');return loadFromDadosJson().catch(function(){return loadFromOneDrive();}).then(function(){return true;}).catch(function(){if(manual!==false)jsonStatus('ℹ️ Mantendo base local. Tente "Atualizar agora" ou carregue o .xlsx manualmente.');return false;});};
+  window.loadDadosJson=function(){return window.refreshData(true);};
+  window.addEventListener('load',function(){if(location.search.indexOf('nojson=1')>=0)return;setTimeout(function(){refreshData(false);},600);setInterval(function(){refreshData(false);},REFRESH_MS);});
 })();
 /* ===================== MÓDULOS (painel, confiabilidade, favoritos, etc.) ===================== */
 (function(){

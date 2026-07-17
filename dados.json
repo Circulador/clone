@@ -1,8 +1,1161 @@
 {
   "meta": {
-    "generated_at": "2026-07-09T20:25:04.442152Z",
-    "source": "GitHub Actions + OneDrive",
-    "count": 0
+    "generated_at": "2026-07-17T12:38:18.839Z",
+    "source": "dataset embutido",
+    "total": 192
   },
-  "records": []
+  "records": [
+    {
+      "entrega": "2024-06-24",
+      "nome": "SDCDBN",
+      "grupo": "1",
+      "resol": "2025-04-14"
+    },
+    {
+      "entrega": "2025-02-27",
+      "nome": "RML-BMC",
+      "grupo": "2",
+      "resol": "2025-05-23"
+    },
+    {
+      "entrega": "2025-02-28",
+      "nome": "JMV-MM",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-03-18",
+      "nome": "CPR",
+      "grupo": "1",
+      "resol": "2025-11-27"
+    },
+    {
+      "entrega": "2025-03-27",
+      "nome": "DGS",
+      "grupo": "JSI",
+      "resol": "2025-12-30"
+    },
+    {
+      "entrega": "2025-06-16",
+      "nome": "NPS-LP",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-06-18",
+      "nome": "VPP",
+      "grupo": "1",
+      "resol": "2026-05-08"
+    },
+    {
+      "entrega": "2025-06-19",
+      "nome": "MB (PENDENCIA)",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2025-06-23",
+      "nome": "AFO",
+      "grupo": "1",
+      "resol": "2026-02-24"
+    },
+    {
+      "entrega": "2025-06-27",
+      "nome": "JT-PENDENCIA",
+      "grupo": "1",
+      "resol": "2025-11-28"
+    },
+    {
+      "entrega": "2025-06-30",
+      "nome": "LFPG-LP",
+      "grupo": "1",
+      "resol": "2025-08-15"
+    },
+    {
+      "entrega": "2025-06-30",
+      "nome": "KFCG",
+      "grupo": "1",
+      "resol": "2025-08-15"
+    },
+    {
+      "entrega": "2025-07-01",
+      "nome": "NSF",
+      "grupo": "1",
+      "resol": "2026-01-06"
+    },
+    {
+      "entrega": "2025-07-01",
+      "nome": "RMB",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-07-01",
+      "nome": "RPC(IRMAO DO RPC)",
+      "grupo": "2",
+      "resol": "2025-08-19"
+    },
+    {
+      "entrega": "2025-07-02",
+      "nome": "VMR-LP",
+      "grupo": "1",
+      "resol": "2025-11-11"
+    },
+    {
+      "entrega": "2025-07-03",
+      "nome": "JPPC-PENDENCIA",
+      "grupo": "1",
+      "resol": "2025-12-02"
+    },
+    {
+      "entrega": "2025-07-03",
+      "nome": "LOD",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-07-07",
+      "nome": "BMF-AFJ",
+      "grupo": "-",
+      "resol": "2026-01-09"
+    },
+    {
+      "entrega": "2025-07-07",
+      "nome": "EMM-RMM",
+      "grupo": "JSI",
+      "resol": "2025-09-22"
+    },
+    {
+      "entrega": "2025-07-08",
+      "nome": "TVA",
+      "grupo": "1",
+      "resol": "2026-01-26"
+    },
+    {
+      "entrega": "2025-07-08",
+      "nome": "LCC-RM",
+      "grupo": "1",
+      "resol": "2025-08-22"
+    },
+    {
+      "entrega": "2025-07-09",
+      "nome": "EG",
+      "grupo": "1",
+      "resol": "2026-01-28"
+    },
+    {
+      "entrega": "2025-07-10",
+      "nome": "BVS",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-07-10",
+      "nome": "AVS-BVS",
+      "grupo": "1",
+      "resol": "2026-02-05"
+    },
+    {
+      "entrega": "2025-07-11",
+      "nome": "AGS-AGP",
+      "grupo": "1",
+      "resol": "2025-10-07"
+    },
+    {
+      "entrega": "2025-07-14",
+      "nome": "ACDTL-CT",
+      "grupo": "JSI",
+      "resol": "2025-12-09"
+    },
+    {
+      "entrega": "2025-07-14",
+      "nome": "KMSD-WD",
+      "grupo": "JSI",
+      "resol": "2026-03-18"
+    },
+    {
+      "entrega": "2025-07-14",
+      "nome": "BC-MAM",
+      "grupo": "1",
+      "resol": "2026-02-06"
+    },
+    {
+      "entrega": "2025-07-14",
+      "nome": "IC-MAM",
+      "grupo": "1",
+      "resol": "2026-02-06"
+    },
+    {
+      "entrega": "2025-07-16",
+      "nome": "YDF",
+      "grupo": "JSI",
+      "resol": "2026-03-26"
+    },
+    {
+      "entrega": "2025-07-17",
+      "nome": "FBB",
+      "grupo": "1",
+      "resol": "2026-02-19"
+    },
+    {
+      "entrega": "2025-07-17",
+      "nome": "GGA",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-07-18",
+      "nome": "It F",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-07-18",
+      "nome": "Ic F",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-07-21",
+      "nome": "RHL",
+      "grupo": "JSI",
+      "resol": "2025-11-25"
+    },
+    {
+      "entrega": "2025-07-22",
+      "nome": "GSCC-LP",
+      "grupo": "1",
+      "resol": "2025-10-07"
+    },
+    {
+      "entrega": "2025-07-22",
+      "nome": "RPC",
+      "grupo": "2",
+      "resol": "2025-08-19"
+    },
+    {
+      "entrega": "2025-07-22",
+      "nome": "MRE-TD",
+      "grupo": "1",
+      "resol": "2025-10-08"
+    },
+    {
+      "entrega": "2025-07-23",
+      "nome": "TPG-AGP",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-07-23",
+      "nome": "BPF",
+      "grupo": "2",
+      "resol": "2026-05-04"
+    },
+    {
+      "entrega": "2025-07-23",
+      "nome": "LBS",
+      "grupo": "1",
+      "resol": "2025-10-08"
+    },
+    {
+      "entrega": "2025-07-23",
+      "nome": "TPB",
+      "grupo": "1",
+      "resol": "2025-10-08"
+    },
+    {
+      "entrega": "2025-07-23",
+      "nome": "APG-AGP",
+      "grupo": "1",
+      "resol": "2025-10-07"
+    },
+    {
+      "entrega": "2025-07-29",
+      "nome": "GSBG",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-07-29",
+      "nome": "RME",
+      "grupo": "1",
+      "resol": "2026-03-18"
+    },
+    {
+      "entrega": "2025-07-29",
+      "nome": "NSVM",
+      "grupo": "2",
+      "resol": "2026-03-20"
+    },
+    {
+      "entrega": "2025-07-29",
+      "nome": "JLSJ",
+      "grupo": "CMP",
+      "resol": null
+    },
+    {
+      "entrega": "2025-07-30",
+      "nome": "LML",
+      "grupo": "2",
+      "resol": "2026-03-25"
+    },
+    {
+      "entrega": "2025-07-30",
+      "nome": "MGM",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2025-07-30",
+      "nome": "JPWT",
+      "grupo": "1",
+      "resol": "2026-03-31"
+    },
+    {
+      "entrega": "2025-07-30",
+      "nome": "LBDS",
+      "grupo": "2",
+      "resol": "2026-03-27"
+    },
+    {
+      "entrega": "2025-07-31",
+      "nome": "LH",
+      "grupo": "1",
+      "resol": "2026-03-30"
+    },
+    {
+      "entrega": "2025-07-31",
+      "nome": "TPQ",
+      "grupo": "2",
+      "resol": "2026-03-31"
+    },
+    {
+      "entrega": "2025-08-01",
+      "nome": "MAASFL-NFL",
+      "grupo": "ADM",
+      "resol": "2026-01-12"
+    },
+    {
+      "entrega": "2025-08-01",
+      "nome": "FME",
+      "grupo": "1",
+      "resol": "2026-03-18"
+    },
+    {
+      "entrega": "2025-08-01",
+      "nome": "BK",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-08-04",
+      "nome": "LB",
+      "grupo": "1",
+      "resol": "2026-05-06"
+    },
+    {
+      "entrega": "2025-08-05",
+      "nome": "LBL",
+      "grupo": "1",
+      "resol": "2025-10-22"
+    },
+    {
+      "entrega": "2025-08-06",
+      "nome": "RPF",
+      "grupo": "2",
+      "resol": "2026-05-04"
+    },
+    {
+      "entrega": "2025-08-07",
+      "nome": "BAAE",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2025-08-08",
+      "nome": "AQS",
+      "grupo": "1",
+      "resol": "2026-04-21"
+    },
+    {
+      "entrega": "2025-08-08",
+      "nome": "MLME",
+      "grupo": "1",
+      "resol": "2026-03-18"
+    },
+    {
+      "entrega": "2025-08-08",
+      "nome": "WIR-LF",
+      "grupo": "1",
+      "resol": "2026-03-24"
+    },
+    {
+      "entrega": "2025-08-08",
+      "nome": "GSC-GP",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-08-08",
+      "nome": "PACD",
+      "grupo": "2",
+      "resol": "2026-04-22"
+    },
+    {
+      "entrega": "2025-08-11",
+      "nome": "RGC e RGC (IRMÃOS)",
+      "grupo": "JSI",
+      "resol": null
+    },
+    {
+      "entrega": "2025-08-11",
+      "nome": "GCGM-LP",
+      "grupo": "1",
+      "resol": "2025-08-21"
+    },
+    {
+      "entrega": "2025-08-11",
+      "nome": "MMF-AFJ",
+      "grupo": "-",
+      "resol": "2026-01-09"
+    },
+    {
+      "entrega": "2025-08-11",
+      "nome": "VPM-LP",
+      "grupo": "1",
+      "resol": "2025-08-21"
+    },
+    {
+      "entrega": "2025-08-11",
+      "nome": "BAM",
+      "grupo": "1",
+      "resol": "2026-04-28"
+    },
+    {
+      "entrega": "2025-08-12",
+      "nome": "HMPA",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-08-12",
+      "nome": "FC",
+      "grupo": "1",
+      "resol": "2026-04-30"
+    },
+    {
+      "entrega": "2025-08-12",
+      "nome": "JB",
+      "grupo": "1",
+      "resol": "2026-05-06"
+    },
+    {
+      "entrega": "2025-08-14",
+      "nome": "CPS",
+      "grupo": "1",
+      "resol": "2026-05-12"
+    },
+    {
+      "entrega": "2025-08-14",
+      "nome": "MP",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-08-14",
+      "nome": "MLP",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-08-15",
+      "nome": "MVC",
+      "grupo": "1",
+      "resol": "2026-05-18"
+    },
+    {
+      "entrega": "2025-08-15",
+      "nome": "GMF-AFJ",
+      "grupo": "1",
+      "resol": "2026-01-09"
+    },
+    {
+      "entrega": "2025-08-15",
+      "nome": "ISPL-PENDENCIA",
+      "grupo": "1",
+      "resol": "2026-05-18"
+    },
+    {
+      "entrega": "2025-08-15",
+      "nome": "PP - PLP",
+      "grupo": "JSI",
+      "resol": null
+    },
+    {
+      "entrega": "2025-08-18",
+      "nome": "DFP",
+      "grupo": "1",
+      "resol": "2026-05-19"
+    },
+    {
+      "entrega": "2025-08-18",
+      "nome": "ARJ",
+      "grupo": "1",
+      "resol": "2026-05-19"
+    },
+    {
+      "entrega": "2025-08-19",
+      "nome": "CCJC",
+      "grupo": "1",
+      "resol": "2026-05-26"
+    },
+    {
+      "entrega": "2025-08-19",
+      "nome": "SEM",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-08-19",
+      "nome": "APKO",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2025-08-19",
+      "nome": "SRMO LMO",
+      "grupo": "1",
+      "resol": "2026-05-21"
+    },
+    {
+      "entrega": "2025-08-20",
+      "nome": "AZS-LFTS",
+      "grupo": "1",
+      "resol": "2026-05-25"
+    },
+    {
+      "entrega": "2025-08-20",
+      "nome": "APSN",
+      "grupo": "2",
+      "resol": "2025-10-27"
+    },
+    {
+      "entrega": "2025-08-20",
+      "nome": "MLC-RCP",
+      "grupo": "2",
+      "resol": "2025-08-26"
+    },
+    {
+      "entrega": "2025-08-21",
+      "nome": "ACO",
+      "grupo": "1",
+      "resol": "2025-08-28"
+    },
+    {
+      "entrega": "2025-08-22",
+      "nome": "RMI",
+      "grupo": "1",
+      "resol": "2026-05-27"
+    },
+    {
+      "entrega": "2025-08-22",
+      "nome": "SLA",
+      "grupo": "2",
+      "resol": "2026-05-29"
+    },
+    {
+      "entrega": "2025-08-22",
+      "nome": "APT",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-08-25",
+      "nome": "CSVM",
+      "grupo": "2",
+      "resol": "2026-03-20"
+    },
+    {
+      "entrega": "2025-08-26",
+      "nome": "MR",
+      "grupo": "1",
+      "resol": "2026-06-01"
+    },
+    {
+      "entrega": "2025-08-28",
+      "nome": "VCC",
+      "grupo": "2",
+      "resol": "2026-06-12"
+    },
+    {
+      "entrega": "2025-08-28",
+      "nome": "TES",
+      "grupo": "1",
+      "resol": "2026-06-12"
+    },
+    {
+      "entrega": "2025-08-29",
+      "nome": "GPAC",
+      "grupo": "1",
+      "resol": "2026-06-12"
+    },
+    {
+      "entrega": "2025-08-29",
+      "nome": "NTC",
+      "grupo": "2",
+      "resol": "2026-06-11"
+    },
+    {
+      "entrega": "2025-08-29",
+      "nome": "LAMC",
+      "grupo": "2",
+      "resol": "2026-06-08"
+    },
+    {
+      "entrega": "2025-09-01",
+      "nome": "LCG-MVC",
+      "grupo": "1",
+      "resol": "2026-05-18"
+    },
+    {
+      "entrega": "2025-09-01",
+      "nome": "GMM-AFJ",
+      "grupo": "1",
+      "resol": "2026-01-09"
+    },
+    {
+      "entrega": "2025-09-01",
+      "nome": "NMP",
+      "grupo": "JSI",
+      "resol": "2026-06-15"
+    },
+    {
+      "entrega": "2025-09-02",
+      "nome": "NLS",
+      "grupo": "1",
+      "resol": "2026-06-19"
+    },
+    {
+      "entrega": "2025-09-02",
+      "nome": "MLS-NLS",
+      "grupo": "1",
+      "resol": "2026-06-19"
+    },
+    {
+      "entrega": "2025-09-02",
+      "nome": "ANT",
+      "grupo": "1",
+      "resol": "2026-06-16"
+    },
+    {
+      "entrega": "2025-09-03",
+      "nome": "SFP-SP",
+      "grupo": "1",
+      "resol": "2026-06-19"
+    },
+    {
+      "entrega": "2025-09-05",
+      "nome": "KCF",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-09-05",
+      "nome": "ELS-KV",
+      "grupo": "2",
+      "resol": "2026-06-23"
+    },
+    {
+      "entrega": "2025-09-05",
+      "nome": "ESM",
+      "grupo": "2",
+      "resol": "2026-06-23"
+    },
+    {
+      "entrega": "2025-09-05",
+      "nome": "CAG",
+      "grupo": "1",
+      "resol": "2026-06-23"
+    },
+    {
+      "entrega": "2025-09-08",
+      "nome": "BMO",
+      "grupo": "2",
+      "resol": "2026-06-25"
+    },
+    {
+      "entrega": "2025-09-09",
+      "nome": "NBV",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2025-09-10",
+      "nome": "ASP-MLP",
+      "grupo": "1",
+      "resol": "2026-07-06"
+    },
+    {
+      "entrega": "2025-09-11",
+      "nome": "LCPG-LP",
+      "grupo": "1",
+      "resol": "2025-09-11"
+    },
+    {
+      "entrega": "2025-09-11",
+      "nome": "ABSC-RHS",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-09-11",
+      "nome": "VRG",
+      "grupo": "JSI",
+      "resol": null
+    },
+    {
+      "entrega": "2025-09-11",
+      "nome": "JM",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-09-12",
+      "nome": "LLP-DP",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2025-09-12",
+      "nome": "JHSE-CAS",
+      "grupo": "2",
+      "resol": "2025-09-18"
+    },
+    {
+      "entrega": "2025-09-15",
+      "nome": "MGD",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2025-09-15",
+      "nome": "ADP",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-09-16",
+      "nome": "CAB-LP",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-09-16",
+      "nome": "PVDC",
+      "grupo": "JSI",
+      "resol": null
+    },
+    {
+      "entrega": "2025-09-18",
+      "nome": "AG",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2025-09-19",
+      "nome": "RGB-RG",
+      "grupo": "JSI",
+      "resol": null
+    },
+    {
+      "entrega": "2025-09-19",
+      "nome": "AGS-AGP",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2025-09-19",
+      "nome": "KFV",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2025-09-19",
+      "nome": "NSD-CAS",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2025-09-22",
+      "nome": "RC",
+      "grupo": "JSI",
+      "resol": null
+    },
+    {
+      "entrega": "2025-09-23",
+      "nome": "APN-ADP",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-09-24",
+      "nome": "VSP",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2025-09-24",
+      "nome": "ARG",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-09-25",
+      "nome": "ABLB",
+      "grupo": "2",
+      "resol": "2026-06-22"
+    },
+    {
+      "entrega": "2025-09-25",
+      "nome": "RFRZ",
+      "grupo": "1",
+      "resol": "2026-06-23"
+    },
+    {
+      "entrega": "2025-09-25",
+      "nome": "FDPC",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-09-26",
+      "nome": "PLMC-NFL",
+      "grupo": "JSI",
+      "resol": null
+    },
+    {
+      "entrega": "2025-09-29",
+      "nome": "EHPSBC-CPS",
+      "grupo": "1",
+      "resol": "2025-12-11"
+    },
+    {
+      "entrega": "2025-09-29",
+      "nome": "LG-PG",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-09-30",
+      "nome": "ARA-CC",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-09-30",
+      "nome": "NDS",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2025-10-01",
+      "nome": "LFC",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-10-01",
+      "nome": "TMCL",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2025-10-02",
+      "nome": "ESC-TSS",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-10-03",
+      "nome": "AG",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-10-03",
+      "nome": "RAA",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-10-06",
+      "nome": "ISC",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-10-07",
+      "nome": "CAMC",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2025-10-08",
+      "nome": "JRPCS",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-10-09",
+      "nome": "VCB-DCG",
+      "grupo": "JSI",
+      "resol": "2025-10-29"
+    },
+    {
+      "entrega": "2025-10-13",
+      "nome": "DLP",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2025-10-14",
+      "nome": "EGC",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2025-10-14",
+      "nome": "SG",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2025-10-15",
+      "nome": "MFL-FM",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2025-10-15",
+      "nome": "MR",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-10-16",
+      "nome": "RM",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-10-16",
+      "nome": "TMSC",
+      "grupo": "JSI",
+      "resol": null
+    },
+    {
+      "entrega": "2025-10-17",
+      "nome": "ADCS",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-10-20",
+      "nome": "CNS-CLNS",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-10-20",
+      "nome": "RPS-MPS",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-10-22",
+      "nome": "SBZA",
+      "grupo": "-",
+      "resol": null
+    },
+    {
+      "entrega": "2025-10-23",
+      "nome": "IDGL-IBGL",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2025-10-23",
+      "nome": "PCA",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2025-10-24",
+      "nome": "FME",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-10-24",
+      "nome": "GVM",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2025-10-27",
+      "nome": "PMA",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-10-27",
+      "nome": "CGNO",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-10-31",
+      "nome": "MNS",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2025-11-03",
+      "nome": "MMF-AFJ",
+      "grupo": "1",
+      "resol": "2026-01-09"
+    },
+    {
+      "entrega": "2025-11-03",
+      "nome": "JCG -KC",
+      "grupo": "1",
+      "resol": "2025-11-04"
+    },
+    {
+      "entrega": "2025-11-10",
+      "nome": "LPS",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-11-10",
+      "nome": "JPS-LPS",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-11-12",
+      "nome": "PDA-FRSAC",
+      "grupo": "ADM",
+      "resol": null
+    },
+    {
+      "entrega": "2025-11-12",
+      "nome": "RSAC-FRSAC",
+      "grupo": "ADM",
+      "resol": null
+    },
+    {
+      "entrega": "2025-11-12",
+      "nome": "FRSAC",
+      "grupo": "ADM",
+      "resol": null
+    },
+    {
+      "entrega": "2025-11-14",
+      "nome": "AAR",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-11-14",
+      "nome": "MLP",
+      "grupo": "1",
+      "resol": "2026-05-13"
+    },
+    {
+      "entrega": "2025-11-17",
+      "nome": "ACA",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2025-11-21",
+      "nome": "JFB-RMC",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-11-25",
+      "nome": "ALDP-ADP",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-11-27",
+      "nome": "BSB",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-11-27",
+      "nome": "APAB",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-11-28",
+      "nome": "RPM",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2025-12-01",
+      "nome": "AG",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2025-12-03",
+      "nome": "DMA",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-12-04",
+      "nome": "MCS-GCS",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2025-12-11",
+      "nome": "MBB-FBB",
+      "grupo": "1",
+      "resol": "2026-02-19"
+    },
+    {
+      "entrega": "2025-12-19",
+      "nome": "SLA",
+      "grupo": "1",
+      "resol": null
+    },
+    {
+      "entrega": "2025-12-24",
+      "nome": "HBP",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2026-01-12",
+      "nome": "GCS",
+      "grupo": "2",
+      "resol": null
+    },
+    {
+      "entrega": "2026-02-25",
+      "nome": "LKD",
+      "grupo": "2",
+      "resol": "2026-05-14"
+    }
+  ]
 }
