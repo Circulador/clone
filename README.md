@@ -52,7 +52,8 @@ Links OneDrive (atualizados pela comunidade):
 - **Evolução da fila** (aguardando, entradas, concluídos por mês)
 - **Taxa de resolução mensal** e velocímetro de ritmo
 - **Distribuição percentil** (p25–p90) com sua posição relativa
-- **Vizinhos na fila** (±15 posições)
+- **Heatmap de resoluções** (calendário por dia, últimos 6 meses)
+- **Análise avançada** colapsável: hazard, histograma de tempos
 - Alerta FIFO e prazo legal 730d (só Balcão)
 
 ### Aba Comunidade

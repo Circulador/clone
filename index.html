@@ -250,6 +250,18 @@ details.advanced summary{cursor:pointer;font-weight:600;font-size:13px;color:var
 .nb-p{min-width:32px;color:var(--txt3)}.nb-n{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.nb-d{font-size:11px;color:var(--txt3)}
 .charts-main{margin-top:4px}
 .charts-main .chart-block{margin-bottom:0}
+.heatmap-wrap{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.hm-title{font-size:12px;color:var(--txt2);margin-bottom:10px;line-height:1.45}
+.hm-months{display:flex;flex-direction:column;gap:10px}
+.hm-month{display:flex;align-items:flex-start;gap:10px}
+.hm-month-label{font-size:11px;font-weight:600;color:var(--txt3);min-width:52px;padding-top:2px}
+.hm-grid{display:flex;flex-wrap:wrap;gap:2px;flex:1}
+.hm-cell{width:11px;height:11px;border-radius:2px;background:var(--panel);border:1px solid var(--line)}
+.hm-cell.l1{background:rgba(200,90,40,.35);border-color:rgba(200,90,40,.2)}
+.hm-cell.l2{background:rgba(200,90,40,.62);border-color:rgba(200,90,40,.35)}
+.hm-cell.l3{background:rgba(200,90,40,.95);border-color:rgba(200,90,40,.5)}
+.hm-legend{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--txt3);margin-top:10px}
+.hm-legend .hm-cell{width:12px;height:12px}
 @media(max-width:800px){.kh-grid,.forecast-row{grid-template-columns:1fr 1fr}}
 @media(max-width:480px){.kh-grid,.forecast-row{grid-template-columns:1fr}}
 .pos-honest{font-size:11.5px;color:var(--txt3);margin-top:4px;line-height:1.45}
@@ -665,6 +677,43 @@ function neighborsHtml(x, P) {
     rows.push('<div class="nb-row' + (you ? ' you' : '') + '"><span class="nb-p">' + (i + 1) + 'º</span><span class="nb-n">' + w.nome + '</span><span class="nb-d">' + fmt(w.dEntrega) + '</span></div>');
   }
   return '<div class="neighbors"><div class="nb-title">Vizinhos na fila (' + (start + 1) + '–' + end + ' de ' + waiting.length + ')</div><div class="nb-list">' + rows.join('') + '</div></div>';
+}
+
+function resolutionDayCounts(pid) {
+  var counts = {};
+  ((SHEET_STATS[pid] || {}).resolved || []).forEach(function (r) {
+    if (!r.dResol) return;
+    var k = r.dResol.getFullYear() + '-' + p2(r.dResol.getMonth() + 1) + '-' + p2(r.dResol.getDate());
+    counts[k] = (counts[k] || 0) + 1;
+  });
+  return counts;
+}
+
+function resolutionHeatmapHtml(pid) {
+  var counts = resolutionDayCounts(pid);
+  if (!Object.keys(counts).length) return '';
+  var M = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+  var months = [], i, mStart;
+  for (i = 5; i >= 0; i--) {
+    mStart = new Date(TODAY.getFullYear(), TODAY.getMonth() - i, 1);
+    months.push(mStart);
+  }
+  var html = '<div class="heatmap-wrap"><div class="hm-title">Heatmap de resoluções — intensidade por dia (últimos 6 meses · fila ' + pid + ')</div><div class="hm-months">';
+  months.forEach(function (mStart) {
+    var y = mStart.getFullYear(), mo = mStart.getMonth();
+    var daysInMonth = new Date(y, mo + 1, 0).getDate();
+    html += '<div class="hm-month"><div class="hm-month-label">' + M[mo] + '/' + String(y).slice(2) + '</div><div class="hm-grid">';
+    var d;
+    for (d = 1; d <= daysInMonth; d++) {
+      var k = y + '-' + p2(mo + 1) + '-' + p2(d);
+      var n = counts[k] || 0;
+      var level = n >= 3 ? 3 : n;
+      html += '<div class="hm-cell l' + level + '" title="' + d + ' ' + M[mo] + ': ' + n + ' resolução(ões)"></div>';
+    }
+    html += '</div></div>';
+  });
+  html += '</div><div class="hm-legend"><span class="hm-cell l0"></span>0 <span class="hm-cell l1"></span>1 <span class="hm-cell l2"></span>2 <span class="hm-cell l3"></span>3+</div></div>';
+  return html;
 }
 
 function countOvertaken(x) {
@@ -1186,11 +1235,17 @@ function select(x) {
     '<div class="chart-block"><h5>3 · Curva Kaplan-Meier</h5><div class="chart-cap">★ você · ponto verde = mediana histórica</div><div class="chartbox chartbox-km"><canvas id="cKM"></canvas></div></div>' +
     '</div>';
   html += neighborsHtml(x, P);
+  html += '<details class="chart-fold" id="advancedCharts"><summary>🔬 Análise avançada</summary><div class="chart-inner charts-stack">' +
+    resolutionHeatmapHtml(pid) +
+    '<div class="chart-block"><h5>Risco de resolução (hazard)</h5><div class="chart-cap">Picos indicam janelas de lote — barras vermelhas ≈ 270–300d na B</div><div class="chartbox"><canvas id="cHazard"></canvas></div></div>' +
+    '<div class="chart-block"><h5>Distribuição de tempos (resolvidos)</h5><div class="chart-cap">Quantos processos levaram cada faixa de dias nesta planilha</div><div class="chartbox"><canvas id="cHist"></canvas></div></div>' +
+    '</div></details>';
   html += '<details class="chart-fold"><summary>ℹ️ Metodologia e limitações</summary><div class="chart-inner"><div class="disc" style="margin:0"><ul><li>Dados voluntários só da planilha <b>' + pid + '</b>.</li><li>Forecast por posição ÷ throughput; KM por histórico de tempos.</li><li>Não substitui consulta oficial ao Consulado.</li></ul></div></div></details>';
   html += '</div>';
   res.innerHTML = html;
   showSheetContext();
   drawCharts(x, P);
+  setupAdvancedCharts(x, P);
   afterSelect(x);
   setUrlParams({ sheet: activeSheet, proc: x.nome });
 }
@@ -1270,6 +1325,53 @@ function drawCharts(x, P) {
     kmOpts.scales.y.title = { display: true, text: '% ainda na fila', color: ct.txt };
     addChart(ckm, { type: 'line', data: { datasets: datasets }, options: kmOpts });
   }
+}
+
+function drawAdvancedCharts(x, P) {
+  if (!chartReady) return;
+  var pid = P.pid;
+  var ct = chartTheme();
+  var haz = hazardFromInsights(pid);
+  var cHz = document.getElementById('cHazard');
+  if (cHz && haz && haz.length && !cHz.dataset.rendered) {
+    cHz.dataset.rendered = '1';
+    addChart(cHz, {
+      type: 'bar',
+      data: {
+        labels: haz.map(function (b) { return b.label; }),
+        datasets: [{
+          label: 'Hazard (%/30d)',
+          data: haz.map(function (b) { return b.val; }),
+          backgroundColor: haz.map(function (b) { return b.hi ? 'rgba(206,43,55,.85)' : 'rgba(200,90,40,.5)'; }),
+          borderRadius: 4
+        }]
+      },
+      options: baseChartOpts(ct)
+    });
+  }
+  var bins = histogramBins(pid);
+  var cHist = document.getElementById('cHist');
+  if (cHist && bins.some(function (b) { return b.n > 0; }) && !cHist.dataset.rendered) {
+    cHist.dataset.rendered = '1';
+    addChart(cHist, {
+      type: 'bar',
+      data: {
+        labels: bins.map(function (b) { return b.l + 'd'; }),
+        datasets: [{ label: 'Resolvidos', data: bins.map(function (b) { return b.n; }), backgroundColor: ct.salvia, borderRadius: 5 }]
+      },
+      options: baseChartOpts(ct)
+    });
+  }
+}
+
+function setupAdvancedCharts(x, P) {
+  var det = document.getElementById('advancedCharts');
+  if (!det) return;
+  function tryRender() {
+    if (det.open) drawAdvancedCharts(x, P);
+  }
+  det.addEventListener('toggle', tryRender);
+  tryRender();
 }
 
 function setStatus(m) { var el = document.getElementById('upStatus'); if (el) el.textContent = m; }
