@@ -79,7 +79,9 @@ Também inclui:
 
 ## 🌐 Acesso
 
-👉 **Site oficial:** [Consultor de Fila Consular](https://circulador.github.io/fila-consulado/)
+👉 **Acesso ao painel:** [Consultor de Fila Consular](https://circulador.github.io/consulado/)
+
+Repositório: [github.com/Circulador/consulado](https://github.com/Circulador/consulado)
 
 ---
 
@@ -187,7 +189,7 @@ Os indicadores, gráficos e projeções possuem **caráter exclusivamente inform
 ## 📁 Estrutura sugerida do projeto
 
 ```text
-fila-consulado/
+consulado/
 ├── index.html
 ├── dados.json
 ├── manifest.json
