@@ -1,5 +1,5 @@
-// Service Worker — Consolare (v15 — identidade visual)
-const CACHE = 'consolare-v15';
+// Service Worker — Consolare (v16 — cards, stepper, icones)
+const CACHE = 'consolare-v16';
 const CORE = ['./', './index.html', './assets/logo.svg', './icon-192.png', './icon-512.png', './icon-512-maskable.png', './manifest.json'];
 
 self.addEventListener('install', e => {

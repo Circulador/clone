@@ -1,5 +1,5 @@
 /**
- * Ícones PWA — ampulheta comum + faixa tricolor (comunidade, não oficial).
+ * Ícones PWA — Consolare (navy + emblema verde/vermelho).
  * Requer: Node 18+ (sem dependências externas).
  */
 import { writeFileSync } from 'fs';
@@ -10,9 +10,7 @@ import { fileURLToPath } from 'url';
 const __dir = dirname(fileURLToPath(import.meta.url));
 const root = join(__dir, '..');
 
-const BG = [26, 22, 18];
-const TERRA = [200, 90, 40];
-const SAND = [243, 236, 227];
+const NAVY = [13, 27, 42];
 const VERDE = [0, 146, 70];
 const BIANCO = [255, 255, 255];
 const ROSSO = [206, 43, 55];
@@ -65,7 +63,7 @@ function pngSolid(size, draw) {
   ]);
 }
 
-function inRoundRect(x, y, size, rx, ry, rw, rh, rad) {
+function inRoundRect(x, y, rx, ry, rw, rh, rad) {
   const cx = Math.max(rx + rad, Math.min(x, rx + rw - rad - 1));
   const cy = Math.max(ry + rad, Math.min(y, ry + rh - rad - 1));
   const dx = x < rx + rad ? x - (rx + rad) : x >= rx + rw - rad ? x - (rx + rw - rad - 1) : 0;
@@ -74,46 +72,53 @@ function inRoundRect(x, y, size, rx, ry, rw, rh, rad) {
   return x >= rx && x < rx + rw && y >= ry && y < ry + rh;
 }
 
-function inHourglass(x, y, size) {
+function onRing(x, y, size, color) {
   const cx = size / 2;
-  const cy = size * 0.46;
-  const w = size * 0.22;
-  const h = size * 0.34;
-  const nx = (x - cx) / w;
-  const ny = (y - cy) / h;
-  if (Math.abs(nx) > 1) return false;
-  const top = ny < 0 && Math.abs(ny) <= 1 - Math.abs(nx) * 0.15;
-  const bot = ny > 0 && Math.abs(ny) <= 1 - Math.abs(nx) * 0.15;
-  const neck = Math.abs(nx) < 0.12 && Math.abs(ny) < 0.08;
-  return top || bot || neck;
+  const cy = size * 0.44;
+  const rOut = size * 0.28;
+  const rIn = size * 0.23;
+  const dx = x - cx + 0.5;
+  const dy = y - cy + 0.5;
+  const d2 = dx * dx + dy * dy;
+  if (d2 > rOut * rOut || d2 < rIn * rIn) return false;
+  const ang = Math.atan2(dy, dx);
+  if (color === 'green') return ang > -Math.PI * 0.55 && ang < Math.PI * 0.05;
+  return ang >= Math.PI * 0.05 || ang <= -Math.PI * 0.55;
+}
+
+function inEmblem(x, y, size) {
+  const cx = size / 2;
+  const cy = size * 0.44;
+  const nx = (x - cx) / (size * 0.1);
+  const ny = (y - (cy - size * 0.04)) / (size * 0.08);
+  if (ny >= -0.8 && ny <= 0.2 && Math.abs(nx) <= 0.55) {
+    if (ny < 0 && Math.abs(nx + ny * 0.3) < 0.35) return true;
+    if (ny >= 0 && Math.abs(nx) < 0.45) return true;
+  }
+  const wy = cy + size * 0.1;
+  if (y >= wy && y <= wy + size * 0.04 && x >= cx - size * 0.18 && x <= cx + size * 0.18) return true;
+  return false;
 }
 
 function drawIcon(x, y, size) {
-  const pad = size * 0.1;
-  const rad = size * 0.18;
-  if (!inRoundRect(x, y, size, pad, pad, size - pad * 2, size - pad * 2, rad)) {
+  const pad = size * 0.08;
+  const rad = size * 0.2;
+  if (!inRoundRect(x, y, pad, pad, size - pad * 2, size - pad * 2, rad)) {
     return [0, 0, 0, 0];
   }
-  const stripeH = size * 0.1;
-  const stripeY = size - pad - stripeH;
-  if (y >= stripeY) {
-    const third = (size - pad * 2) / 3;
-    const lx = x - pad;
-    if (lx < third) return [...VERDE, 255];
-    if (lx < third * 2) return [...BIANCO, 255];
-    return [...ROSSO, 255];
-  }
-  if (inHourglass(x, y, size)) return [...SAND, 255];
-  return [...TERRA, 255];
+  if (onRing(x, y, size, 'green')) return [...VERDE, 255];
+  if (onRing(x, y, size, 'red')) return [...ROSSO, 255];
+  if (inEmblem(x, y, size)) return [...BIANCO, 240];
+  return [...NAVY, 255];
 }
 
 function drawMaskable(x, y, size) {
   const cx = size / 2;
   const cy = size / 2;
-  const r = size * 0.44;
+  const r = size * 0.48;
   const dx = x - cx + 0.5;
   const dy = y - cy + 0.5;
-  if (dx * dx + dy * dy > r * r) return [...BG, 255];
+  if (dx * dx + dy * dy > r * r) return [...NAVY, 255];
   return drawIcon(x, y, size);
 }
 

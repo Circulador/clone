@@ -10,11 +10,11 @@
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0D1B2A">
 <meta name="apple-mobile-web-app-title" content="Consolare">
-<link rel="apple-touch-icon" href="icon-192.png?v=9">
-<link rel="apple-touch-icon" sizes="192x192" href="icon-192.png?v=9">
-<link rel="apple-touch-icon" sizes="512x512" href="icon-512.png?v=9">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=9">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=9">
+<link rel="apple-touch-icon" href="icon-192.png?v=11">
+<link rel="apple-touch-icon" sizes="192x192" href="icon-192.png?v=11">
+<link rel="apple-touch-icon" sizes="512x512" href="icon-512.png?v=11">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=11">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=11">
 <style>
 /* Consolare — identidade visual (#0D1B2A · #009246 · #CE2B37 · #F0F2F5) */
 :root,:root[data-theme="light"]{
@@ -315,6 +315,35 @@ details.advanced summary{cursor:pointer;font-weight:600;font-size:13px;color:var
 .watch-btn{background:var(--panel2);border:1px solid var(--line);color:var(--txt2);border-radius:9px;padding:9px 14px;font-size:13px;font-weight:600;cursor:pointer}
 .watch-btn.on{background:rgba(107,143,113,.15);border-color:var(--salvia);color:var(--salvia)}
 .report-link{font-size:12px;color:var(--txt3);margin-top:8px}.report-link a{color:var(--accent)}
+.dash-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px}
+.dash-card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 20px;box-shadow:var(--shadow);min-height:120px;display:flex;flex-direction:column}
+.dash-card.highlight{border-color:rgba(0,146,70,.35);background:linear-gradient(180deg,var(--panel) 0%,rgba(0,146,70,.04) 100%)}
+.dc-label{font-size:11px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
+.dc-title{font-size:14px;font-weight:700;color:var(--navy);margin-top:6px;line-height:1.3}
+.dc-big{font-size:42px;font-weight:800;color:var(--green);line-height:1;margin:4px 0}
+.dc-range{font-size:22px;font-weight:800;color:var(--navy);margin:4px 0;line-height:1.2}
+.dc-sub{font-size:12px;color:var(--txt2);margin-top:auto;line-height:1.45}
+.pill{display:inline-block;font-size:10px;font-weight:700;padding:4px 12px;border-radius:20px;text-transform:uppercase;letter-spacing:.3px}
+.pill.wait{background:rgba(0,146,70,.12);color:#007a3d}
+.pill.lote{background:rgba(212,160,23,.15);color:#9a7200}
+.process-stepper{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 16px 14px;margin-bottom:14px;box-shadow:var(--shadow);overflow-x:auto}
+.ps-title{font-size:12px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:14px}
+.ps-track{display:flex;align-items:flex-start;justify-content:space-between;min-width:480px;position:relative;padding:0 4px}
+.ps-track::before{content:'';position:absolute;top:14px;left:8%;right:8%;height:2px;background:var(--line);z-index:0}
+.ps-step{flex:1;text-align:center;position:relative;z-index:1;min-width:72px}
+.ps-dot{width:28px;height:28px;border-radius:50%;background:var(--panel);border:2px solid var(--line);margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--txt3)}
+.ps-step.done .ps-dot{background:var(--green);border-color:var(--green);color:#fff}
+.ps-step.done .ps-dot::after{content:'✓';font-size:11px}
+.ps-step.current .ps-dot{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,146,70,.2);color:var(--green);font-weight:800}
+.ps-step.current .ps-dot::after{content:''}
+.ps-step.done .ps-dot,.ps-step.current .ps-dot{font-size:0}
+.ps-lbl{font-size:10px;color:var(--txt3);line-height:1.25;font-weight:500}
+.ps-step.done .ps-lbl{color:var(--green);font-weight:600}
+.ps-step.current .ps-lbl{color:var(--navy);font-weight:700}
+.posb-compact{padding:14px 18px;margin-bottom:0}
+.posb-compact .num{font-size:0;width:0;min-width:0;overflow:hidden}
+.posb-compact .progress{min-width:100%;margin-top:8px}
+@media(max-width:800px){.dash-cards{grid-template-columns:1fr}}
 .sug-homonym{padding:8px 12px;font-size:11.5px;color:var(--it-rosso);background:rgba(206,43,55,.08);border-bottom:1px solid var(--line)}
 @media print{
   html.print-brief .side,html.print-brief .navtoggle,html.print-brief .nav-overlay,html.print-brief .back-btn,html.print-brief .searchbox,html.print-brief .suggestions,html.print-brief .act-row,html.print-brief .chip-row,html.print-brief .queue-fold,html.print-brief .favPanel,html.print-brief .top button,html.print-brief .official-header,html.print-brief .naooficial-banner,html.print-brief .app-footer,html.print-brief details.chart-fold,html.print-brief .neighbors,html.print-brief .legalbox,html.print-brief .visit-delta,html.print-brief .quality-warn,html.print-brief .related-proc{display:none!important}
@@ -895,6 +924,47 @@ function relatedProcessesHtml(x, pid) {
       return '<div class="rel-row"><span>' + (r.done ? '✅' : '⏳') + '</span><b>' + r.nome + '</b> · ' + fmt(r.dEntrega) +
         ' <span style="color:var(--txt3);font-size:10px">(' + r._relMotivo + ')</span></div>';
     }).join('') + '</div>';
+}
+
+function dashboardCardsHtml(x, P, regime) {
+  var pid = P.pid;
+  var main = P.hybrid ? P.hybrid : P.real;
+  var pillCls = regime.cls === 'lote' ? 'lote' : 'wait';
+  var pillTxt = regime.cls === 'lote' ? 'Janela de lote' : 'Em andamento';
+  return '<div class="dash-cards print-zone">' +
+    '<div class="dash-card"><div class="dc-label">Status</div><span class="pill ' + pillCls + '">' + pillTxt + '</span>' +
+    '<div class="dc-title">' + x.nome + ' ' + planilhaTag(pid) + '</div>' +
+    '<div class="dc-sub">Entrega ' + fmt(x.dEntrega) + ' · <b>' + x.espera + ' dias</b> aguardando</div></div>' +
+    '<div class="dash-card highlight"><div class="dc-label">Posição na fila</div><div class="dc-big">' + P.pos + 'º</div>' +
+    '<div class="dc-sub">de <b>' + P.total + '</b> aguardando · ' + P.ahead + ' à frente</div></div>' +
+    '<div class="dash-card"><div class="dc-label">Previsão indicativa</div><div class="dc-range">' + mesAno(P.cons.date) + ' – ' + mesAno(P.opt.date) + '</div>' +
+    '<div class="dc-sub">Centro: <b>' + mesAno(main.date) + '</b> (híbrido) · não é garantia</div></div></div>';
+}
+
+function processPhases(pid) {
+  if (pid === 'JSI') {
+    return [{ label: 'JSI recebido', min: 0 }, { label: 'Análise', min: 30 }, { label: 'Validação', min: 120 }, { label: 'PEC', min: 300 }, { label: 'Conclusão', min: 99999 }];
+  }
+  if (pid === 'P') {
+    return [{ label: 'Envio SEDEX', min: 0 }, { label: 'Análise', min: 14 }, { label: 'Validação', min: 60 }, { label: 'Resolução', min: 120 }, { label: 'Conclusão', min: 99999 }];
+  }
+  return [{ label: 'Recebimento', min: 0 }, { label: 'Análise', min: 60 }, { label: 'Validação', min: 180 }, { label: 'Janela lote', min: 240 }, { label: 'Conclusão', min: 99999 }];
+}
+
+function processStepperHtml(x, pid) {
+  var phases = processPhases(pid);
+  var e = x.espera;
+  var cur = 0, i;
+  for (i = 0; i < phases.length - 1; i++) {
+    if (e >= phases[i].min) cur = i;
+  }
+  var steps = phases.map(function (ph, idx) {
+    var done = idx < cur || (idx === 0 && e >= 0);
+    var current = idx === cur;
+    if (idx === phases.length - 1 && !x.done) { done = false; current = cur === idx; }
+    return '<div class="ps-step' + (done ? ' done' : '') + (current ? ' current' : '') + '"><div class="ps-dot">' + (done ? '' : (idx + 1)) + '</div><div class="ps-lbl">' + ph.label + '</div></div>';
+  }).join('');
+  return '<div class="process-stepper print-zone"><div class="ps-title">Fases do processo · fila ' + pid + ' (estimativa comunitária)</div><div class="ps-track">' + steps + '</div></div>';
 }
 
 function methodologyHtml(pid) {
@@ -1518,8 +1588,9 @@ function select(x) {
   var homonym = homonymBannerHtml(x.nome, pid);
   var html = '<div class="onepage">';
   if (homonym) html += homonym;
-  html += '<div class="posb print-zone"><div class="num">' + P.pos + 'º</div><div class="txt"><b>' + x.nome + '</b> ' + planilhaTag(pid) +
-    '<p>Entrega ' + fmt(x.dEntrega) + ' · <b>' + x.espera + ' dias</b> aguardando · ' + P.ahead + ' à frente · ' + P.total + ' na fila</p>' +
+  html += dashboardCardsHtml(x, P, regime);
+  html += processStepperHtml(x, pid);
+  html += '<div class="posb posb-compact print-zone"><div class="num"></div><div class="txt"><b>' + x.nome + '</b> ' + planilhaTag(pid) +
     '<p class="pos-honest">Ordem por data de entrega — não é FIFO' +
     (fifo ? ' (~' + fifo.pct_inversao + '% invertem)' : '') + ' · regime: <b>' + regime.label + '</b></p></div>' +
     '<div class="progress"><i style="width:' + pctAhead + '%"></i><span>~' + pctAhead + '% da fila atrás de você</span></div></div>';
